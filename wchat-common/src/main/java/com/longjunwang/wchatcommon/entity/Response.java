@@ -24,10 +24,18 @@ public class Response<T> {
         return response;
     }
 
-    public static Response<?> error() {
+    public static Response<?> error(ResponseCode code) {
         Response<?>  response = new Response<> ();
-        response.setCode(ResponseCode.ERROR.getCode());
-        response.setMessage(ResponseCode.ERROR.getMessage());
+        response.setCode(code.getCode());
+        response.setMessage(code.getMessage());
+        return response;
+    }
+
+    public static Response<String> customer(ResponseCode code, String errorMsg){
+        Response<String> response = new Response<>();
+        response.setCode(code.getCode());
+        response.setMessage(code.getMessage());
+        response.setMessage(errorMsg);
         return response;
     }
 }

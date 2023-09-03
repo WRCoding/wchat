@@ -5,6 +5,7 @@ import com.longjunwang.wchatcommon.entity.Response;
 import com.longjunwang.wchathttp.service.oauth.OauthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -34,8 +35,12 @@ public class OauthController {
     }
 
     @GetMapping("/getCheckCode")
-    public Response<String> getCheckCode(String email) throws IOException {
-        log.info("email: {}", email);
-        return Response.success(UUID.randomUUID().toString());
+    public Response<String> getCheckCode(String email) {
+        return oauthService.getCheckCode(email);
+    }
+
+    @PostMapping("/register")
+    public Response<String> register(String email, String checkCode) {
+        return oauthService.register(email, checkCode);
     }
 }
