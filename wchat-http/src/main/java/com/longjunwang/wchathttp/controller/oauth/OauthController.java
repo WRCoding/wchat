@@ -2,12 +2,12 @@ package com.longjunwang.wchathttp.controller.oauth;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.longjunwang.wchatcommon.entity.Response;
+import com.longjunwang.wchatcommon.entity.vo.LoginVo;
+import com.longjunwang.wchatcommon.entity.vo.RegisterVo;
+import com.longjunwang.wchatcommon.entity.vo.UserInfoVo;
 import com.longjunwang.wchathttp.service.oauth.OauthService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.io.IOException;
@@ -40,7 +40,13 @@ public class OauthController {
     }
 
     @PostMapping("/register")
-    public Response<String> register(String email, String checkCode) {
-        return oauthService.register(email, checkCode);
+    public Response<String> register(@RequestBody RegisterVo registerVo) {
+        return oauthService.register(registerVo);
+    }
+
+    @PostMapping("/login")
+    public Response<UserInfoVo> login(@RequestBody LoginVo loginVo){
+        log.info("loginVo: {}", loginVo);
+        return oauthService.login(loginVo);
     }
 }

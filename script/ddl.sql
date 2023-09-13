@@ -5,6 +5,7 @@ CREATE TABLE UserInfo
     avatar_url  VARCHAR(255) COMMENT '头像链接',
     phone       VARCHAR(255) COMMENT '手机号',
     email       VARCHAR(255) COMMENT '邮箱',
+    password    VARCHAR(255) NOT NULL COMMENT '密码',
     create_time TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     update_time TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     PRIMARY KEY (id),

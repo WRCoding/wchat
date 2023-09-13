@@ -3,6 +3,9 @@ package com.longjunwang.wchathttp.service.oauth;
 import com.longjunwang.wchatcommon.constant.ResponseCode;
 import com.longjunwang.wchatcommon.entity.Response;
 import com.longjunwang.wchatcommon.entity.ouath.UserInfo;
+import com.longjunwang.wchatcommon.entity.vo.LoginVo;
+import com.longjunwang.wchatcommon.entity.vo.RegisterVo;
+import com.longjunwang.wchatcommon.entity.vo.UserInfoVo;
 import com.longjunwang.wchatcommon.mapper.UserInfoMapper;
 import com.longjunwang.wchatcommon.util.CheckCodeUtil;
 import com.longjunwang.wchathttp.service.mail.MailService;
@@ -27,10 +30,10 @@ public class OauthService {
     @Resource
     private MailService mailService;
     public Response<String> getCheckCode(String email) {
-        UserInfo userInfo = userService.selectByEmail(email);
+        UserInfo userInfo = userService.selectByPhoneOrEmail(email);
         if (Objects.nonNull(userInfo)){
             log.info(userInfo.toString());
-            return Response.customer(ResponseCode.PARAM_ERROR,"邮箱已经注册");
+            return Response.customer(ResponseCode.PARAM_ERROR,"邮箱已经注册", "");
         }
         mailService.sendMail(email, CheckCodeUtil.generateCheckCode(email));
         return Response.success("验证码已发送");
@@ -41,14 +44,11 @@ public class OauthService {
         return gitHubService.getAccessToken(code);
     }
 
-    public Response<String> register(String email, String checkCode) {
-        UserInfo userInfo = userService.selectByEmail(email);
-        if (Objects.nonNull(userInfo)){
-            return Response.customer(ResponseCode.PARAM_ERROR,"邮箱已经注册");
-        }
-        if (!CheckCodeUtil.verifyCode(email, checkCode)){
-            return Response.customer(ResponseCode.VERIFY_ERROR,"验证码错误或失效");
-        }
-        return userService.register(email);
+    public Response<String> register(RegisterVo registerVo) {
+        return userService.register(registerVo);
+    }
+
+    public Response<UserInfoVo> login(LoginVo loginVo) {
+        return userService.login(loginVo);
     }
 }

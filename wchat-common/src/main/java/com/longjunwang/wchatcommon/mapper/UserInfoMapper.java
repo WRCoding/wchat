@@ -8,6 +8,7 @@ import java.util.List;
 @Mapper
 public interface UserInfoMapper {
 
+    int insert(UserInfo userInfo);
     List<UserInfo> selectAll();
-    UserInfo selectByEmail(String email);
+    UserInfo selectByKey(String key);
 }

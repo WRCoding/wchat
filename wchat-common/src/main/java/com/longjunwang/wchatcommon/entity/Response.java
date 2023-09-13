@@ -31,11 +31,20 @@ public class Response<T> {
         return response;
     }
 
-    public static Response<String> customer(ResponseCode code, String errorMsg){
-        Response<String> response = new Response<>();
+    public static <T> Response<T> customer(ResponseCode code, String errorMsg, T data){
+        Response<T> response = new Response<>();
         response.setCode(code.getCode());
-        response.setMessage(code.getMessage());
         response.setMessage(errorMsg);
+        response.setData(null);
         return response;
+    }
+
+    @Override
+    public String toString() {
+        return "Response{" +
+                "code='" + code + '\'' +
+                ", message='" + message + '\'' +
+                ", data=" + data +
+                '}';
     }
 }

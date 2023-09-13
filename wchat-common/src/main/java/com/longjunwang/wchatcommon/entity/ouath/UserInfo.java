@@ -12,6 +12,7 @@ public class UserInfo {
         private String userName;
         private String avatarUrl;
         private String phone;
+        private String passWord;
         private String email;
         private String createTime;
         private String updateTime;
