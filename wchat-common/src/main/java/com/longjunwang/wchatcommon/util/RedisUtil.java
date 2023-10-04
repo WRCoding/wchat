@@ -10,8 +10,6 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.util.concurrent.TimeUnit;
 
-@Component
-@DependsOn("springBeanUtil")
 @Slf4j
 public class RedisUtil {
 
@@ -19,8 +17,7 @@ public class RedisUtil {
     private static RedisTemplate<String, Object> redisTemplate;
     private static HashOperations<String, String, Object> hashOperations;
 
-    @PostConstruct
-    public void init(){
+    static {
         RedisUtil.redisTemplate = SpringBeanUtil.getBean("redisTemplate", RedisTemplate.class);
         RedisUtil.hashOperations = redisTemplate.opsForHash();
     }
@@ -90,8 +87,8 @@ public class RedisUtil {
      * @param key 键
      * @return 值
      */
-    public static Object get(String key) {
-        return key == null ? null : redisTemplate.opsForValue().get(key);
+    public static String get(String key) {
+        return key == null ? null : (String) redisTemplate.opsForValue().get(key);
     }
 
     /**
