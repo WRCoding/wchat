@@ -1,12 +1,11 @@
 package com.longjunwang.wchathttp.service.oauth;
 
 import com.longjunwang.wchatcommon.constant.ResponseCode;
-import com.longjunwang.wchatcommon.entity.Response;
-import com.longjunwang.wchatcommon.entity.ouath.UserInfo;
-import com.longjunwang.wchatcommon.entity.vo.LoginVo;
-import com.longjunwang.wchatcommon.entity.vo.RegisterVo;
-import com.longjunwang.wchatcommon.entity.vo.UserInfoVo;
-import com.longjunwang.wchatcommon.mapper.UserInfoMapper;
+import com.longjunwang.wchatcommon.pojo.Response;
+import com.longjunwang.wchatcommon.entity.UserInfo;
+import com.longjunwang.wchatcommon.pojo.vo.LoginVo;
+import com.longjunwang.wchatcommon.pojo.vo.RegisterVo;
+import com.longjunwang.wchatcommon.pojo.vo.UserInfoVo;
 import com.longjunwang.wchatcommon.util.CheckCodeUtil;
 import com.longjunwang.wchathttp.service.mail.MailService;
 import com.longjunwang.wchathttp.service.user.UserService;

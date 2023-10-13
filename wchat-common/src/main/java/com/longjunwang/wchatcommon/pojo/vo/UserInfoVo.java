@@ -1,4 +1,4 @@
-package com.longjunwang.wchatcommon.entity.vo;
+package com.longjunwang.wchatcommon.pojo.vo;
 
 import lombok.Data;
 
@@ -8,4 +8,6 @@ public class UserInfoVo {
     private String email;
     private String phone;
     private String avatarUrl;
+
+    private String ipAndPort;
 }

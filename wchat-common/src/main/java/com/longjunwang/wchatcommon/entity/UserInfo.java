@@ -1,8 +1,6 @@
-package com.longjunwang.wchatcommon.entity.ouath;
+package com.longjunwang.wchatcommon.entity;
 
 import cn.hutool.core.annotation.Alias;
-import cn.hutool.core.annotation.AliasFor;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data

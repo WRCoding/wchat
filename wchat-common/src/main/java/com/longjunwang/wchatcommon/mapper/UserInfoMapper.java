@@ -1,6 +1,6 @@
 package com.longjunwang.wchatcommon.mapper;
 
-import com.longjunwang.wchatcommon.entity.ouath.UserInfo;
+import com.longjunwang.wchatcommon.entity.UserInfo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

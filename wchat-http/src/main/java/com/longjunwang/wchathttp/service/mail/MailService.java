@@ -36,6 +36,5 @@ public class MailService {
                 log.info("send mail[{}] error: {}",email, e.getMessage());
             }
         });
-        System.out.println("aaa");
     }
 }

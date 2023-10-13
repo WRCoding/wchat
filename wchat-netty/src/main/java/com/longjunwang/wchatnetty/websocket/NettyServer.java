@@ -1,10 +1,8 @@
 package com.longjunwang.wchatnetty.websocket;
 
+import com.longjunwang.wchatnetty.RegisterServer;
 import io.netty.bootstrap.ServerBootstrap;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.EventLoopGroup;
+import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
@@ -21,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.net.UnknownHostException;
 
 /**
  * desc: nettyServer
@@ -33,8 +32,10 @@ import javax.annotation.PostConstruct;
 public class NettyServer {
 
 
-    private EventLoopGroup bossGroup = new NioEventLoopGroup(1);
-    private EventLoopGroup workerGroup = new NioEventLoopGroup(NettyRuntime.availableProcessors());
+    private final EventLoopGroup bossGroup = new NioEventLoopGroup(1);
+    private final EventLoopGroup workerGroup = new NioEventLoopGroup(NettyRuntime.availableProcessors());
+
+    private ChannelFuture channelFuture;
 
     @PostConstruct
     public void init() throws InterruptedException {
@@ -42,7 +43,6 @@ public class NettyServer {
     }
 
     private void startWebSocketServer() throws InterruptedException {
-// 服务器启动引导对象
         ServerBootstrap serverBootstrap = new ServerBootstrap();
         serverBootstrap.group(bossGroup, workerGroup)
                 .channel(NioServerSocketChannel.class)
@@ -51,6 +51,19 @@ public class NettyServer {
                 .handler(new LoggingHandler(LogLevel.INFO))
                 .childHandler(new NettyWebSocketInitial());
         // 启动服务器，监听端口，阻塞直到启动成功
-        serverBootstrap.bind(7779).sync();
+        channelFuture = serverBootstrap.bind(7779).sync();
+        if (!RegisterServer.registerServer()){
+            close();
+            log.error("Netty服务启动失败，端口：7779");
+        }else{
+            log.info("Netty服务启动成功，端口：7779");
+        }
     }
+
+    private void close() {
+        bossGroup.shutdownGracefully();
+        workerGroup.shutdownGracefully();
+        channelFuture.channel().close();
+    }
+
 }

@@ -1,6 +1,4 @@
-package com.longjunwang.wchatcommon.entity.vo;
-
-import lombok.Data;
+package com.longjunwang.wchatcommon.pojo.vo;
 
 public class LoginVo {
     private String key;

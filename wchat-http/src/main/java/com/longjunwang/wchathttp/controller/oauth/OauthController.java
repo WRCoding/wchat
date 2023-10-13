@@ -1,10 +1,9 @@
 package com.longjunwang.wchathttp.controller.oauth;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.longjunwang.wchatcommon.entity.Response;
-import com.longjunwang.wchatcommon.entity.vo.LoginVo;
-import com.longjunwang.wchatcommon.entity.vo.RegisterVo;
-import com.longjunwang.wchatcommon.entity.vo.UserInfoVo;
+import com.longjunwang.wchatcommon.pojo.Response;
+import com.longjunwang.wchatcommon.pojo.vo.LoginVo;
+import com.longjunwang.wchatcommon.pojo.vo.RegisterVo;
+import com.longjunwang.wchatcommon.pojo.vo.UserInfoVo;
 import com.longjunwang.wchathttp.service.oauth.OauthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;

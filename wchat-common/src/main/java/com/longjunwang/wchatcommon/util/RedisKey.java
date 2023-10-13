@@ -11,6 +11,8 @@ public class RedisKey {
      */
     public static final String USER_TOKEN_STRING = "token:%d";
 
+    public static final String SERVER_INFOS = BASE_KEY + "serverInfos";
+
 
     public static String getKey(String key, Object... objects) {
         return BASE_KEY + String.format(key, objects);

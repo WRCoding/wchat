@@ -1,4 +1,4 @@
-package com.longjunwang.wchatcommon.entity.vo;
+package com.longjunwang.wchatcommon.pojo.vo;
 
 import lombok.Data;
 

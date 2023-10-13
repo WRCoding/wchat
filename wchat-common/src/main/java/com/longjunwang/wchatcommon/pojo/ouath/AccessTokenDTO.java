@@ -1,4 +1,4 @@
-package com.longjunwang.wchatcommon.entity.ouath;
+package com.longjunwang.wchatcommon.pojo.ouath;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

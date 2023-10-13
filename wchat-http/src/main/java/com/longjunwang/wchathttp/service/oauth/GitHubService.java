@@ -2,8 +2,8 @@ package com.longjunwang.wchathttp.service.oauth;
 
 import cn.hutool.json.JSONUtil;
 import com.longjunwang.wchatcommon.common.Constants;
-import com.longjunwang.wchatcommon.entity.ouath.AccessTokenDTO;
-import com.longjunwang.wchatcommon.entity.ouath.UserInfo;
+import com.longjunwang.wchatcommon.pojo.ouath.AccessTokenDTO;
+import com.longjunwang.wchatcommon.entity.UserInfo;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.stereotype.Service;

@@ -1,20 +1,16 @@
 package com.longjunwang.wchathttp;
 
 
-import com.longjunwang.wchatcommon.entity.vo.LoginVo;
-import com.longjunwang.wchatcommon.entity.vo.RegisterVo;
+import com.longjunwang.wchatcommon.pojo.vo.LoginVo;
+import com.longjunwang.wchatcommon.pojo.vo.RegisterVo;
 import com.longjunwang.wchatcommon.mapper.UserInfoMapper;
 import com.longjunwang.wchatcommon.util.CheckCodeUtil;
-import com.longjunwang.wchatcommon.util.RedisUtil;
 import com.longjunwang.wchathttp.service.oauth.OauthService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-
-import java.io.IOException;
-import java.util.List;
 
 @SpringJUnitConfig
 @SpringBootTest

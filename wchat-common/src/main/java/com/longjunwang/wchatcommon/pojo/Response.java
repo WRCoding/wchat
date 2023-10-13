@@ -1,4 +1,4 @@
-package com.longjunwang.wchatcommon.entity;
+package com.longjunwang.wchatcommon.pojo;
 
 import com.longjunwang.wchatcommon.constant.ResponseCode;
 import lombok.Data;

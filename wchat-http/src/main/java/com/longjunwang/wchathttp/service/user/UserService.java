@@ -2,12 +2,14 @@ package com.longjunwang.wchathttp.service.user;
 
 import cn.hutool.core.util.IdUtil;
 import com.longjunwang.wchatcommon.constant.ResponseCode;
-import com.longjunwang.wchatcommon.entity.Response;
-import com.longjunwang.wchatcommon.entity.ouath.UserInfo;
-import com.longjunwang.wchatcommon.entity.vo.LoginVo;
-import com.longjunwang.wchatcommon.entity.vo.RegisterVo;
-import com.longjunwang.wchatcommon.entity.vo.UserInfoVo;
+import com.longjunwang.wchatcommon.pojo.Response;
+import com.longjunwang.wchatcommon.pojo.ServerInfo;
+import com.longjunwang.wchatcommon.entity.UserInfo;
+import com.longjunwang.wchatcommon.pojo.vo.LoginVo;
+import com.longjunwang.wchatcommon.pojo.vo.RegisterVo;
+import com.longjunwang.wchatcommon.pojo.vo.UserInfoVo;
 import com.longjunwang.wchatcommon.mapper.UserInfoMapper;
+import com.longjunwang.wchatcommon.server.ServerManager;
 import com.longjunwang.wchatcommon.util.CheckCodeUtil;
 import com.longjunwang.wchatcommon.util.CommonUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,9 @@ public class UserService {
 
     @Resource
     private UserInfoMapper userInfoMapper;
+
+    @Resource
+    private ServerManager serverManager;
 
 
     public UserInfo selectByPhoneOrEmail(String key) {
@@ -59,7 +64,14 @@ public class UserService {
         if (!userInfo.getPassWord().equals(loginVo.getPassWord())){
             return Response.customer(ResponseCode.VERIFY_ERROR,"密码错误", null);
         }
+        return Response.success(initUserInfoVo(userInfo));
+    }
 
-        return Response.success(CommonUtil.transfer(userInfo, UserInfoVo.class));
+    private UserInfoVo initUserInfoVo(UserInfo userInfo) {
+        ServerInfo serverInfo = serverManager.getServerInfo();
+        String ipAndPort = serverInfo.getIp() + "@" + serverInfo.getNettyPort();
+        UserInfoVo userInfoVo = CommonUtil.transfer(userInfo, UserInfoVo.class);
+        userInfoVo.setIpAndPort(ipAndPort);
+        return userInfoVo;
     }
 }
