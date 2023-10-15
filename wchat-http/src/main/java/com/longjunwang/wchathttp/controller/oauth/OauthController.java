@@ -40,6 +40,7 @@ public class OauthController {
 
     @PostMapping("/register")
     public Response<String> register(@RequestBody RegisterVo registerVo) {
+        log.info("registerVo: {}", registerVo);
         return oauthService.register(registerVo);
     }
 

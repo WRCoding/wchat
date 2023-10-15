@@ -69,7 +69,7 @@ public class UserService {
 
     private UserInfoVo initUserInfoVo(UserInfo userInfo) {
         ServerInfo serverInfo = serverManager.getServerInfo();
-        String ipAndPort = serverInfo.getIp() + "@" + serverInfo.getNettyPort();
+        String ipAndPort = serverInfo.getIp() + ":" + serverInfo.getNettyPort();
         UserInfoVo userInfoVo = CommonUtil.transfer(userInfo, UserInfoVo.class);
         userInfoVo.setIpAndPort(ipAndPort);
         return userInfoVo;

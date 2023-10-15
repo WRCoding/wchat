@@ -25,3 +25,11 @@ CREATE TABLE message (
      INDEX      idx_sendId (send_id),
      INDEX      idx_receiveId (receive_id)
 )ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='消息表';
+
+CREATE TABLE friend_relation (
+     user_id      VARCHAR(255) NOT NULL COMMENT '用户Id',
+     friend_id     VARCHAR(255) NOT NULL COMMENT '好友Id',
+     create_time TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+     update_time TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+     unique KEY (user_id, friend_id)
+)ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='好友关系表';

@@ -24,17 +24,17 @@ public class Response<T> {
         return response;
     }
 
-    public static Response<?> error(ResponseCode code) {
-        Response<?>  response = new Response<> ();
+    public static Response<String> error(ResponseCode code) {
+        Response<String>  response = new Response<> ();
         response.setCode(code.getCode());
         response.setMessage(code.getMessage());
         return response;
     }
 
-    public static <T> Response<T> customer(ResponseCode code, String errorMsg, T data){
+    public static <T> Response<T> customer(ResponseCode code, String msg, T data){
         Response<T> response = new Response<>();
         response.setCode(code.getCode());
-        response.setMessage(errorMsg);
+        response.setMessage(msg);
         response.setData(null);
         return response;
     }
