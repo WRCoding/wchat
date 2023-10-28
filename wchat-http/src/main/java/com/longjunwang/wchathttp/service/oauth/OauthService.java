@@ -39,7 +39,7 @@ public class OauthService {
     }
 
 
-    public String getAccessToken(String code) throws IOException {
+    public Response<UserInfoVo> getAccessToken(String code) throws IOException {
         return gitHubService.getAccessToken(code);
     }
 

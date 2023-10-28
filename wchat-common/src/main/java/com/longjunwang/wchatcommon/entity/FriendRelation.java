@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 public class FriendRelation {
     private String userId;
     private String friendId;
+    private String agree;
     private String createTime;
     private String updateTime;
 

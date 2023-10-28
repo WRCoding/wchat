@@ -1,5 +1,7 @@
-create database wchat;
-CREATE TABLE user_info(
+create
+database wchat;
+CREATE TABLE user_info
+(
     id          VARCHAR(255) NOT NULL COMMENT '主键',
     user_name   VARCHAR(255) NOT NULL COMMENT '用户名',
     avatar_url  VARCHAR(255) COMMENT '头像链接',
@@ -13,23 +15,26 @@ CREATE TABLE user_info(
     UNIQUE KEY uk_email (email)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='用户信息表';
 
-CREATE TABLE message (
-     msg_id      VARCHAR(255) NOT NULL COMMENT '消息id',
-     send_id     VARCHAR(255) NOT NULL COMMENT '发送者id',
-     receive_id  VARCHAR(255) NOT NULL COMMENT '接收者id',
-     msgType    INT          NOT NULL COMMENT '消息类型',
-     content    VARCHAR(255) NOT NULL COMMENT '消息内容',
-     create_time TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-     update_time TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-     unique KEY (msg_id),
-     INDEX      idx_sendId (send_id),
-     INDEX      idx_receiveId (receive_id)
+CREATE TABLE message
+(
+    msg_id      VARCHAR(255) NOT NULL COMMENT '消息id',
+    send_id     VARCHAR(255) NOT NULL COMMENT '发送者id',
+    receive_id  VARCHAR(255) NOT NULL COMMENT '接收者id',
+    msgType     INT          NOT NULL COMMENT '消息类型',
+    content     VARCHAR(255) NOT NULL COMMENT '消息内容',
+    create_time TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    unique KEY (msg_id),
+    INDEX       idx_sendId (send_id),
+    INDEX       idx_receiveId (receive_id)
 )ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='消息表';
 
-CREATE TABLE friend_relation (
-     user_id      VARCHAR(255) NOT NULL COMMENT '用户Id',
-     friend_id     VARCHAR(255) NOT NULL COMMENT '好友Id',
-     create_time TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-     update_time TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-     unique KEY (user_id, friend_id)
+CREATE TABLE friend_relation
+(
+    user_id     VARCHAR(255) NOT NULL COMMENT '用户Id',
+    friend_id   VARCHAR(255) NOT NULL COMMENT '好友Id',
+    agree       varchar(1)   NOT NULL DEFAULT '1' COMMENT '是否同意',
+    create_time TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    unique KEY (user_id, friend_id)
 )ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='好友关系表';

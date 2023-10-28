@@ -2,6 +2,7 @@ package com.longjunwang.wchatcommon.util;
 
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
@@ -13,12 +14,14 @@ public class CommonUtil {
     }
 
     public static <SOURCE,DEST> DEST transfer(SOURCE source, Class<DEST> destClass){
-        try {
-            DEST dest = destClass.newInstance();
-            org.springframework.beans.BeanUtils.copyProperties(source, dest);
-            return dest;
-        } catch (InstantiationException | IllegalAccessException e) {
-            log.error("covertToDest error, e: {}", e.getMessage());
+        if (Objects.nonNull(source)){
+            try {
+                DEST dest = destClass.getDeclaredConstructor().newInstance();
+                org.springframework.beans.BeanUtils.copyProperties(source, dest);
+                return dest;
+            } catch (Exception e) {
+                log.error("covertToDest error, e: {}", e.getMessage());
+            }
         }
         return null;
     }

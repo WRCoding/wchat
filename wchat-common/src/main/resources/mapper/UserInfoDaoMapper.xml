@@ -68,6 +68,26 @@
             </if>
         </trim>
     </insert>
+    <update id="updateBySelective">
+        update user_info set
+        <if test="userName != null">
+            user_name = #{userName},
+        </if>
+        <if test="avatarUrl != null">
+            avatar_url = #{avatarUrl},
+        </if>
+        <if test="phone != null">
+            phone = #{phone},
+        </if>
+        <if test="email != null">
+            email = #{email},
+        </if>
+        <if test="passWord != null">
+            password = #{passWord},
+        </if>
+            update_time = now()
+        where id = #{id}
+    </update>
 
     <select id="selectByKey" parameterType="string" resultMap="userInfo">
         select * from user_info where (email = #{key} or phone =#{key})

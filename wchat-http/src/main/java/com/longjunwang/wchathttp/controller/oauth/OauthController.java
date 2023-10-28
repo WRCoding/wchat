@@ -21,7 +21,7 @@ public class OauthController {
     private OauthService oauthService;
 
     @GetMapping("/callback")
-    public String callback(String code) throws IOException {
+    public Response<UserInfoVo> callback(String code) throws IOException {
         log.info("code: {}", code);
         return oauthService.getAccessToken(code);
     }

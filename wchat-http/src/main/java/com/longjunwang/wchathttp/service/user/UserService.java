@@ -12,6 +12,7 @@ import com.longjunwang.wchatcommon.mapper.UserInfoMapper;
 import com.longjunwang.wchatcommon.server.ServerManager;
 import com.longjunwang.wchatcommon.util.CheckCodeUtil;
 import com.longjunwang.wchatcommon.util.CommonUtil;
+import com.longjunwang.wchatcommon.util.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -64,6 +65,26 @@ public class UserService {
         if (!userInfo.getPassWord().equals(loginVo.getPassWord())){
             return Response.customer(ResponseCode.VERIFY_ERROR,"密码错误", null);
         }
+        saveLoginToken(loginVo.getKey(), IdUtil.fastUUID());
+        return Response.success(initUserInfoVo(userInfo));
+    }
+
+    public Response<UserInfoVo> loginByGitHub(UserInfo gitHubUserInfo, String code){
+        UserInfo old = userInfoMapper.selectByKey(gitHubUserInfo.getEmail());
+        if (Objects.nonNull(old)){
+            log.info("邮箱: {} 已经存在, 更新", gitHubUserInfo.getEmail());
+            gitHubUserInfo.setId(old.getId());
+            userInfoMapper.updateBySelective(gitHubUserInfo);
+        }else{
+            log.info("新用户: {}", gitHubUserInfo);
+            gitHubUserInfo.setId(IdUtil.getSnowflakeNextIdStr());
+            userInfoMapper.insert(gitHubUserInfo);
+        }
+        saveLoginToken(gitHubUserInfo.getEmail(), code);
+        return searchOneByEmail(gitHubUserInfo.getEmail());
+    }
+    public Response<UserInfoVo> searchOneByEmail(String email){
+        UserInfo userInfo = userInfoMapper.selectByKey(email);
         return Response.success(initUserInfoVo(userInfo));
     }
 
@@ -73,5 +94,14 @@ public class UserService {
         UserInfoVo userInfoVo = CommonUtil.transfer(userInfo, UserInfoVo.class);
         userInfoVo.setIpAndPort(ipAndPort);
         return userInfoVo;
+    }
+
+    public void saveLoginToken(String email, String token){
+        RedisUtil.set(token, email);
+    }
+
+    public Response<UserInfoVo> getByToken(String token) {
+        String email = RedisUtil.get(token);
+        return searchOneByEmail(email);
     }
 }

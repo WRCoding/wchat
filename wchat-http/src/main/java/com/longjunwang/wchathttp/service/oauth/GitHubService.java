@@ -4,10 +4,13 @@ import cn.hutool.json.JSONUtil;
 import com.longjunwang.wchatcommon.common.Constants;
 import com.longjunwang.wchatcommon.pojo.ouath.AccessTokenDTO;
 import com.longjunwang.wchatcommon.entity.UserInfo;
+import com.longjunwang.wchatcommon.pojo.vo.UserInfoVo;
+import com.longjunwang.wchathttp.service.user.UserService;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Objects;
@@ -15,20 +18,30 @@ import java.util.Objects;
 @Slf4j
 @Service
 public class GitHubService {
-    public String getAccessToken(String code) throws IOException {
+
+    @Resource
+    private UserService userService;
+
+    public com.longjunwang.wchatcommon.pojo.Response<UserInfoVo> getAccessToken(String code) throws IOException {
         ResponseBody responseBody = sendAccessTokenRequest(code);
+        com.longjunwang.wchatcommon.pojo.Response<UserInfoVo> userInfoVo = new com.longjunwang.wchatcommon.pojo.Response<>();
         if (Objects.nonNull(responseBody)){
             String str = responseBody.string();
             log.info("responseBody: {}", str);
             Map<String, String> bean = JSONUtil.toBean(str, Map.class);
+            String accessToken = bean.get("access_token");
             log.info("map: {}", bean);
-            log.info("access_token: {}", bean.get("access_token"));
-            code = getUserInfo(bean.get("access_token"));
+            log.info("access_token: {}", accessToken);
+            userInfoVo = saveUserInfo(accessToken, code);
         }
-        return code;
+        return userInfoVo;
     }
 
-    public String getUserInfo(String token) throws IOException {
+    private com.longjunwang.wchatcommon.pojo.Response<UserInfoVo> saveUserInfo(String accessToken, String code) throws IOException {
+         return userService.loginByGitHub(getUserInfo(accessToken), code);
+    }
+
+    public UserInfo getUserInfo(String token) throws IOException {
         OkHttpClient client = new OkHttpClient();
         Request request = new Request.Builder()
                 .url(Constants.USER_URL)
@@ -36,10 +49,7 @@ public class GitHubService {
                 .addHeader("Accept", "application/json")
                 .build();
         Response response = client.newCall(request).execute();
-
-        UserInfo gitHubUserInfo = JSONUtil.toBean(response.body().string(), UserInfo.class);
-        log.info("info: {}",gitHubUserInfo);
-        return "111";
+        return JSONUtil.toBean(response.body().string(), UserInfo.class);
     }
 
     private ResponseBody sendAccessTokenRequest(String code) throws IOException {

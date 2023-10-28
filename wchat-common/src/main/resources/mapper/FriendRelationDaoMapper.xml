@@ -4,9 +4,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.longjunwang.wchatcommon.mapper.FriendRelationMapper">
 
-    <resultMap id="userInfo" type="com.longjunwang.wchatcommon.entity.FriendRelation">
+    <resultMap id="friendRelation" type="com.longjunwang.wchatcommon.entity.FriendRelation">
         <result property="userId" column="user_id" />
         <result property="friendId" column="friend_id" />
+        <result property="agree" column="agree" />
         <result property="createTime" column="create_time" />
         <result property="updateTime" column="update_time" />
     </resultMap>
@@ -19,30 +20,22 @@
             <if test="friendId != null">
                 friend_id,
             </if>
-            <if test="createTime != null">
-                create_time,
-            </if>
-            <if test="updateTime != null">
-                update_time,
-            </if>
+            create_time,update_time
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">
+            <if test="userId != null">
                 #{userId},
             </if>
-            <if test="userName != null">
+            <if test="friendId != null">
                 #{friendId},
             </if>
-            <if test="createTime != null">
-                #{createTime},
-            </if>
-            <if test="updateTime != null">
-                #{updateTime},
-            </if>
+            now(),now()
         </trim>
     </insert>
 
-    <select id="selectOneRelation" resultType="com.longjunwang.wchatcommon.entity.FriendRelation">
+    <select id="selectOneRelation" resultMap="friendRelation">
         select * from friend_relation where user_id = #{userId} and friend_id = #{friendId}
+         union
+        select * from friend_relation where user_id = #{friendId} and friend_id = #{userId}
     </select>
 </mapper>

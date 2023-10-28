@@ -28,6 +28,8 @@ public class NettyWebSocketServerHandler extends SimpleChannelInboundHandler<Tex
     @Override
     protected void channelRead0(ChannelHandlerContext channelHandlerContext, TextWebSocketFrame frame) throws Exception {
         System.out.println(frame.text());
-        channelHandlerContext.channel().writeAndFlush(frame);
+        log.info("before: {}", frame.refCnt());
+        channelHandlerContext.channel().writeAndFlush(new TextWebSocketFrame(frame.text()));
+        log.info("after: {}", frame.refCnt());
     }
 }
