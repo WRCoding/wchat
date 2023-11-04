@@ -1,6 +1,7 @@
 package com.longjunwang.wchathttp.service.user;
 
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.json.JSONUtil;
 import com.longjunwang.wchatcommon.constant.ResponseCode;
 import com.longjunwang.wchatcommon.pojo.Response;
 import com.longjunwang.wchatcommon.pojo.ServerInfo;
@@ -15,6 +16,7 @@ import com.longjunwang.wchatcommon.util.CommonUtil;
 import com.longjunwang.wchatcommon.util.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Objects;
@@ -34,6 +36,10 @@ public class UserService {
         return userInfoMapper.selectByKey(key);
     }
 
+    public Response<UserInfoVo> search(String email){
+        return Response.success(initUserInfoVo(searchOneByEmail(email)));
+    }
+    @Transactional
     public Response<String> register(RegisterVo registerVo) {
         if (Objects.nonNull(selectByPhoneOrEmail(registerVo.getEmail()))){
             return Response.customer(ResponseCode.PARAM_ERROR,"邮箱已经注册", "");
@@ -65,8 +71,10 @@ public class UserService {
         if (!userInfo.getPassWord().equals(loginVo.getPassWord())){
             return Response.customer(ResponseCode.VERIFY_ERROR,"密码错误", null);
         }
+        UserInfoVo userInfoVo = initUserInfoVo(userInfo);
         saveLoginToken(loginVo.getKey(), IdUtil.fastUUID());
-        return Response.success(initUserInfoVo(userInfo));
+        saveUserAndServerInfo(userInfoVo);
+        return Response.success(userInfoVo);
     }
 
     public Response<UserInfoVo> loginByGitHub(UserInfo gitHubUserInfo, String code){
@@ -80,12 +88,20 @@ public class UserService {
             gitHubUserInfo.setId(IdUtil.getSnowflakeNextIdStr());
             userInfoMapper.insert(gitHubUserInfo);
         }
+        UserInfo userInfo = searchOneByEmail(gitHubUserInfo.getEmail());
+        UserInfoVo userInfoVo = initUserInfoVo(userInfo);
         saveLoginToken(gitHubUserInfo.getEmail(), code);
-        return searchOneByEmail(gitHubUserInfo.getEmail());
+        saveUserAndServerInfo(userInfoVo);
+        return Response.success(userInfoVo);
     }
-    public Response<UserInfoVo> searchOneByEmail(String email){
-        UserInfo userInfo = userInfoMapper.selectByKey(email);
-        return Response.success(initUserInfoVo(userInfo));
+
+    private void saveUserAndServerInfo(UserInfoVo userInfoVo) {
+        String topicName = userInfoVo.getIpAndPort().replaceAll("\\.", "-").replaceAll(":", "-");
+        RedisUtil.set(userInfoVo.getId(), topicName);
+    }
+
+    public UserInfo searchOneByEmail(String email){
+        return userInfoMapper.selectByKey(email);
     }
 
     private UserInfoVo initUserInfoVo(UserInfo userInfo) {
@@ -102,6 +118,7 @@ public class UserService {
 
     public Response<UserInfoVo> getByToken(String token) {
         String email = RedisUtil.get(token);
-        return searchOneByEmail(email);
+        UserInfoVo userInfoVo = initUserInfoVo(searchOneByEmail(email));
+        return Response.success(userInfoVo);
     }
 }

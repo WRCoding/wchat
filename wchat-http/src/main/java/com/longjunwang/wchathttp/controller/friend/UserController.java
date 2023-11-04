@@ -21,7 +21,7 @@ public class UserController {
     @GetMapping("search")
     public Response<UserInfoVo> searchOneByEmail(String email){
         log.info("email: {}",email);
-        return userService.searchOneByEmail(email);
+        return userService.search(email);
     }
 
     @GetMapping("get/{token}")

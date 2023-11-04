@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.longjunwang.wchatcommon.mapper.MessageMapper">
+
+    <resultMap id="message" type="com.longjunwang.wchatcommon.entity.Message">
+        <result property="msgId" column="msg_id"/>
+        <result property="sendId" column="send_id"/>
+        <result property="receiveId" column="receive_id"/>
+        <result property="msgType" column="msgType"/>
+        <result property="content" column="content"/>
+        <result property="createTime" column="create_time" />
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.longjunwang.wchatcommon.entity.Message">
+        insert into message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="msgId != null">
+                msg_id,
+            </if>
+            <if test="sendId != null">
+                send_id,
+            </if>
+            <if test="receiveId != null">
+                receive_id,
+            </if>
+            <if test="msgType != null">
+                msgType,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            create_time,update_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="msgId != null">
+                #{msgId},
+            </if>
+            <if test="sendId != null">
+                #{sendId},
+            </if>
+            <if test="receiveId != null">
+                #{receiveId},
+            </if>
+            <if test="msgType != null">
+                #{msgType},
+            </if>
+            <if test="content != null">
+                #{content},
+            </if>
+            now(),now()
+        </trim>
+    </insert>
+    <select id="selectByMsgId" resultMap="message">
+        select * from message where msg_id = #{msgId}
+    </select>
+</mapper>

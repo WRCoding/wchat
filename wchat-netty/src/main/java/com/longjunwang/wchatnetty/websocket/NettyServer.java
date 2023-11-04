@@ -16,6 +16,8 @@ import io.netty.handler.stream.ChunkedWriteHandler;
 import io.netty.handler.timeout.IdleStateHandler;
 import io.netty.util.NettyRuntime;
 import lombok.extern.slf4j.Slf4j;
+import org.junit.jupiter.api.Order;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -29,9 +31,12 @@ import java.net.UnknownHostException;
  */
 @Slf4j
 @Component
+@Order(1)
 public class NettyServer {
 
 
+    @Value("${server.nettyPort}")
+    private String nettyPort;
     private final EventLoopGroup bossGroup = new NioEventLoopGroup(1);
     private final EventLoopGroup workerGroup = new NioEventLoopGroup(NettyRuntime.availableProcessors());
 
@@ -51,7 +56,7 @@ public class NettyServer {
                 .handler(new LoggingHandler(LogLevel.INFO))
                 .childHandler(new NettyWebSocketInitial());
         // 启动服务器，监听端口，阻塞直到启动成功
-        channelFuture = serverBootstrap.bind(7779).sync();
+        channelFuture = serverBootstrap.bind(Integer.parseInt(nettyPort)).sync();
         if (!RegisterServer.registerServer()){
             close();
             log.error("Netty服务启动失败，端口：7779");

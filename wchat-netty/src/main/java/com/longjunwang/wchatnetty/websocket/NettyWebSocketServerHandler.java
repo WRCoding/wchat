@@ -1,5 +1,9 @@
 package com.longjunwang.wchatnetty.websocket;
 
+import cn.hutool.json.JSONUtil;
+import com.longjunwang.wchatnetty.entity.ChatMsgReq;
+import com.longjunwang.wchatnetty.factory.msg.MsgHandleFactory;
+import com.longjunwang.wchatnetty.handle.msg.AbsMsgHandle;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
@@ -26,10 +30,11 @@ public class NettyWebSocketServerHandler extends SimpleChannelInboundHandler<Tex
     }
 
     @Override
-    protected void channelRead0(ChannelHandlerContext channelHandlerContext, TextWebSocketFrame frame) throws Exception {
-        System.out.println(frame.text());
-        log.info("before: {}", frame.refCnt());
-        channelHandlerContext.channel().writeAndFlush(new TextWebSocketFrame(frame.text()));
-        log.info("after: {}", frame.refCnt());
+    public void channelRead0(ChannelHandlerContext channelHandlerContext, TextWebSocketFrame frame) throws Exception {
+        String text = frame.text();
+        ChatMsgReq chatMsgReq = JSONUtil.toBean(text, ChatMsgReq.class);
+        log.info("wsMsg: {}", chatMsgReq);
+        AbsMsgHandle msgHandle = MsgHandleFactory.getMsgHandle(chatMsgReq.getMsgType());
+        msgHandle.saveAndSendMsg(chatMsgReq);
     }
 }

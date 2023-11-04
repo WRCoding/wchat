@@ -1,9 +1,14 @@
 package com.longjunwang.wchatcommon.pojo;
 
 import cn.hutool.core.util.IdUtil;
+import com.longjunwang.wchatcommon.util.SpringBeanUtil;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.core.env.Environment;
+
+import java.util.Objects;
+import java.util.Properties;
 
 /**
  * desc: ServerInfo
@@ -21,7 +26,11 @@ public class ServerInfo {
     private Integer nettyPort;
 
     public static ServerInfo initServerInfo(String address){
-        String topicName = IdUtil.fastSimpleUUID();
-        return new ServerInfo(topicName, address, 7779);
+        Environment environment = SpringBeanUtil.getBean(Environment.class);
+        String nettyPort = environment.getProperty("server.nettyPort");
+        String topicName = address.replaceAll("\\.", "-") + "-" + nettyPort;
+        return new ServerInfo(topicName, address, Integer.valueOf(Objects.nonNull(nettyPort) ? nettyPort : "6789"));
     }
+
+
 }

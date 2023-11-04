@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.longjunwang.wchatcommon.mapper.OfflineMessageMapper">
+
+    <resultMap id="OfflineMessageMap" type="com.longjunwang.wchatcommon.entity.OfflineMessage">
+        <id property="msgId" column="msg_id"/>
+        <result property="receiveId" column="receive_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.longjunwang.wchatcommon.entity.OfflineMessage">
+        insert into offline_message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="msgId != null">
+                msg_id,
+            </if>
+            <if test="receiveId != null">
+                receive_id,
+            </if>
+            create_time,update_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="msgId != null">
+                #{msgId},
+            </if>
+            <if test="receiveId != null">
+                #{receiveId},
+            </if>
+            now(),now()
+        </trim>
+    </insert>
+</mapper>

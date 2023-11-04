@@ -1,6 +1,8 @@
 package com.longjunwang.wchatnetty.websocket;
 
+import cn.hutool.core.net.url.UrlBuilder;
 import cn.hutool.core.util.StrUtil;
+import com.longjunwang.wchatnetty.session.SessionManager;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -23,19 +25,6 @@ import java.util.Map;
 @Slf4j
 public class NettyWebSocketVerifyHandler extends ChannelInboundHandlerAdapter {
 
-    @Override
-    public void handlerAdded(ChannelHandlerContext ctx) throws Exception {
-        System.out.println("有连接接入。。。。");
-        super.handlerAdded(ctx);
-    }
-
-    @Override
-    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
-        if (evt instanceof WebSocketServerProtocolHandler.HandshakeComplete) {
-            log.info("HandshakeComplete");
-        }
-        super.userEventTriggered(ctx, evt);
-    }
 
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
@@ -43,7 +32,8 @@ public class NettyWebSocketVerifyHandler extends ChannelInboundHandlerAdapter {
             log.info("fullHttpRequest");
             FullHttpRequest request = (FullHttpRequest) msg;
             String uri = request.uri();
-            System.out.println(uri);
+            String userId = UrlBuilder.ofHttp(uri).getQuery().get("userId").toString();
+            SessionManager.register(userId, ctx.channel());
         } else {
             log.info(msg.getClass().toString());
         }

@@ -1,11 +1,13 @@
 package com.longjunwang.wchatcommon.util;
 
+import cn.hutool.core.exceptions.UtilException;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -31,6 +33,23 @@ public class SpringBeanUtil implements ApplicationContextAware, BeanFactoryPostP
 
     public static ListableBeanFactory getBeanFactory() {
         return null == beanFactory ? applicationContext : beanFactory;
+    }
+
+    public static <T> void registerBean(String beanName, T bean) {
+        final ConfigurableListableBeanFactory factory = getConfigurableBeanFactory();
+        factory.autowireBean(bean);
+        factory.registerSingleton(beanName, bean);
+    }
+    public static ConfigurableListableBeanFactory getConfigurableBeanFactory() throws UtilException {
+        final ConfigurableListableBeanFactory factory;
+        if (null != beanFactory) {
+            factory = beanFactory;
+        } else if (applicationContext instanceof ConfigurableApplicationContext) {
+            factory = ((ConfigurableApplicationContext) applicationContext).getBeanFactory();
+        } else {
+            throw new UtilException("No ConfigurableListableBeanFactory from context!");
+        }
+        return factory;
     }
 
     /**

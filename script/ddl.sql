@@ -38,3 +38,12 @@ CREATE TABLE friend_relation
     update_time TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     unique KEY (user_id, friend_id)
 )ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='好友关系表';
+
+CREATE TABLE offline_message
+(
+    receive_id   VARCHAR(255) NOT NULL COMMENT '接收者id',
+    msg_id       varchar(1)   NOT NULL COMMENT '消息id',
+    create_time TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    update_time TIMESTAMP    NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    INDEX idx_receiveId (receive_id)
+)ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COMMENT ='离线消息表';

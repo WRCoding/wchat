@@ -1,5 +1,6 @@
 package com.longjunwang.wchatcommon.entity;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -9,6 +10,7 @@ import lombok.Data;
  * date:2023-10-06 09:54
  */
 @Data
+@Builder
 public class Message {
     private String msgId;
     private String sendId;

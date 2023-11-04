@@ -4,10 +4,13 @@ import cn.hutool.json.JSONUtil;
 import com.longjunwang.wchatcommon.pojo.ServerInfo;
 import com.longjunwang.wchatcommon.util.RedisKey;
 import com.longjunwang.wchatcommon.util.RedisUtil;
+import com.longjunwang.wchatcommon.util.SpringBeanUtil;
 import lombok.extern.slf4j.Slf4j;
 
 import java.net.InetAddress;
 import java.util.List;
+
+import static cn.hutool.extra.spring.SpringUtil.registerBean;
 
 /**
  * desc: registerServer
@@ -23,6 +26,7 @@ public class RegisterServer {
             String address  = InetAddress.getLocalHost().getHostAddress();
             ServerInfo serverInfo = ServerInfo.initServerInfo(address);
             String serverInfoJson = JSONUtil.toJsonStr(serverInfo);
+            SpringBeanUtil.registerBean("serverInfo", serverInfo);
             log.info("当前服务信息：{}", serverInfoJson);
             RedisUtil.saveListOne(RedisKey.SERVER_INFOS, serverInfoJson);
             return true;
